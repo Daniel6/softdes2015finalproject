@@ -11,7 +11,7 @@ Our minimum viable product is an application that captures a user defined rectan
 Our learning goals for this project are to learn about the API’s for many different hosting sites, learn about registering hotkeys with Ubuntu, learn about capturing the screen in various ways, and to learn about moving image data around without saving it to a file.
 
 ###Project Schedule
-We plan to implement image capturing with the gtk library, and then use http requests to connect the all the web services. We will save user settings in a file and use xlib to register hotkeys in Ubuntu.
+We plan to implement image capturing with the gtk library, and then use http requests to connect to all the web services. We will save user settings in a file and use xlib to register hotkeys in Ubuntu.
 
 As a rough outline, after one week we should have a method of grabbing image data for a particular section of screen. The next week, we should be able to upload the picture to an image hosting site. The third week should see the implementation of hotkeys and the complete pipeline of capture->upload->share. This will complete our minimum viable product and give us 3 more weeks to add more features and polish the application.
 
