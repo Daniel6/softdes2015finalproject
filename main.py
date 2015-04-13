@@ -4,7 +4,7 @@ import subprocess
 sys.path.insert(0, './lib/pyxhook')
 import pyxhook
 from capture import takeScreenshot
-from anonuploadtest import anonymous_Upload
+from anon_upload import anonymous_Upload
 
 def keyDownEvent(event):
 	if event.ScanCode == 37: #If the scan code matches left control, signal that the ctrl button is pressed
