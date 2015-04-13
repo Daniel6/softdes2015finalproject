@@ -19,8 +19,8 @@ def keyDownEvent(event):
 		running =  False
 	elif event.Ascii == 52: #If the ascii value matches '4', and both ctrl and shift are pressed, run screenshot.py
 		if ctrl and shift:
-			print("Click")
-			subprocess.call(["python2", "./capture.py"]) #Spawn a new process that takes a screenshot
+			print("Running Workflow #1")
+			workflow1()
 
 def keyUpEvent(event):
 	if event.ScanCode == 37: #If the scan code matches left control, signal that the ctrl button is not pressed
@@ -30,6 +30,9 @@ def keyUpEvent(event):
 	if event.ScanCode == 50: #If the scan code matches left shift, signal that the shift button is not pressed
 		global shift
 		shift = False
+
+def workflow1(): #Workflow #1
+	subprocess.call(["python2", "./capture.py"]) #Spawn a new process that takes a screenshot
 
 if __name__ == "__main__":
 	hookman = pyxhook.HookManager()
