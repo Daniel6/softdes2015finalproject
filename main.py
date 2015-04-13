@@ -4,6 +4,7 @@ import subprocess
 sys.path.insert(0, './lib/pyxhook')
 import pyxhook
 from capture import takeScreenshot
+from anonuploadtest import anonymous_Upload
 
 def keyDownEvent(event):
 	if event.ScanCode == 37: #If the scan code matches left control, signal that the ctrl button is pressed
@@ -33,6 +34,7 @@ def keyUpEvent(event):
 
 def workflow1(): #Workflow #1
 	subprocess.call(["python2", "./capture.py"]) #Spawn a new process that takes a screenshot
+	anonymous_Upload("screenshot.png")
 
 if __name__ == "__main__":
 	hookman = pyxhook.HookManager()
