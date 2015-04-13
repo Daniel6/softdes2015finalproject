@@ -36,7 +36,7 @@ def upload_kitten(client):
 
 # If you want to run this as a standalone script
 if __name__ == "__main__":
-	sys.path.append("/imgur_examples")
+	sys.path.append("/lib/imgur_examples")
 	client = authenticate()
 	image = upload_kitten(client)
 
