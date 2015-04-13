@@ -8,9 +8,9 @@
 		https://api.imgur.com/endpoints/image
 '''
 
+import sys
 # Pull authentication from the auth example
 from auth import authenticate
-
 from datetime import datetime
 
 album = None # You can also enter an album ID here
@@ -36,6 +36,7 @@ def upload_kitten(client):
 
 # If you want to run this as a standalone script
 if __name__ == "__main__":
+	sys.path.append("/imgur_examples")
 	client = authenticate()
 	image = upload_kitten(client)
 
