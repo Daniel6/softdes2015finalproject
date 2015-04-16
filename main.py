@@ -7,6 +7,7 @@ from capture import takeScreenshot
 from anon_upload import anonymous_Upload
 
 def keyDownEvent(event):
+	print "Ascii: " + str(event.Ascii) + " Scan Code: " + str(event.ScanCode)
 	if event.ScanCode == 37: #If the scan code matches left control, signal that the ctrl button is pressed
 		global ctrl
 		ctrl = True
@@ -15,10 +16,10 @@ def keyDownEvent(event):
 		global shift
 		shift = True
 
-	if event.Ascii == 32: #If the ascii value matches spacebar, terminate the while loop
+	if event.ScanCode == 65: #If the ascii value matches spacebar, terminate the while loop
 		global running
 		running =  False
-	elif event.Ascii == 52: #If the ascii value matches '4', and both ctrl and shift are pressed, run screenshot.py
+	if event.ScanCode == 13: #If the ascii value matches '4', and both ctrl and shift are pressed, run screenshot.py
 		if ctrl and shift:
 			print("Running Workflow #1")
 			workflow1()
@@ -33,7 +34,7 @@ def keyUpEvent(event):
 		shift = False
 
 def workflow1(): #Workflow #1
-	subprocess.call(["python2", "./capture.py"]) #Spawn a new process that takes a screenshot
+	subprocess.call(["/usr/bin/python2.7", "./capture.py"]) #Spawn a new process that takes a screenshot
 	anonymous_Upload("screenshot.png")
 
 if __name__ == "__main__":
