@@ -9,9 +9,9 @@ def anonymous_Upload(image):
 	response = requests.post(
 		"https://api.imgur.com/3/upload.json", 
 		headers={"Authorization": "Client-ID a21509ca229e76a"},
-		data={'image': b64encode(open('screenshot.png', 'rb').read()),
+		data={'image': b64encode(open('SCREENSHOT', 'rb').read()),
 			'type': 'base64',
-			'name': 'screenshot.png',
+			'name': 'SCREENSHOT',
 			'title': 'Picture no. 1'
 		}
 	)
@@ -21,4 +21,4 @@ def anonymous_Upload(image):
 	clipboard.store()
 
 if __name__ == "__main__":
-	anonymous_Upload("screenshot.png")
+	anonymous_Upload("SCREENSHOT")
