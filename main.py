@@ -1,49 +1,56 @@
+from xml.etree import ElementTree
 import time
 import sys
-import subprocess
 sys.path.insert(1, './lib/pyxhook')
 import pyxhook
-from capture import takeScreenshot
-from anon_upload import anonymous_Upload
+from workflow import Workflow
 
 def keyDownEvent(event):
-	print "Ascii: " + str(event.Ascii) + " Scan Code: " + str(event.ScanCode)
-	if event.ScanCode == 37: #If the scan code matches left control, signal that the ctrl button is pressed
-		global ctrl
-		ctrl = True
+	print "Ascii: " + str(event.Ascii) + " Scan Code: " + str(event.ScanCode) + " Key Val: " + str(event.Key)
+	for flow in workflows:
+		flow.keyDown(event.Key)
 
-	if event.ScanCode == 50: #If the scan code matches left shift, signal that the shift button is pressed
-		global shift
-		shift = True
-
-	if event.ScanCode == 65: #If the ascii value matches spacebar, terminate the while loop
+	if event.Key == "space": #exit program when spacebar pressed
 		global running
 		running =  False
-	if event.ScanCode == 13: #If the ascii value matches '4', and both ctrl and shift are pressed, run screenshot.py
-		if ctrl and shift:
-			print("Running Workflow #1")
-			workflow1()
 
 def keyUpEvent(event):
-	if event.ScanCode == 37: #If the scan code matches left control, signal that the ctrl button is not pressed
-		global ctrl
-		ctrl = False
+	for flow in workflows:
+		flow.keyUp(event.Key)
+	
+def loadWorkflows():
+	#Load settings file
+	settings = ElementTree.parse('settings.xml').getroot()
+	#Get number of workflows
+	num_flows = settings.find('num_workflows').text
 
-	if event.ScanCode == 50: #If the scan code matches left shift, signal that the shift button is not pressed
-		global shift
-		shift = False
+	for i in range(1, int(num_flows)+1): #For each workflow in the settings, create corresponding workflow class
+		#Define Workflows
+		workflow = Workflow(i)
 
-def workflow1(): #Workflow #1
-	subprocess.call(["/usr/bin/python2.7", "./capture.py"]) #Spawn a new process that takes a screenshot
-	anonymous_Upload("screenshot.png")
+		#Add workflow to list of workflows
+		workflows.append(workflow)
 
 if __name__ == "__main__":
+	#Setup Hooks into keyboard
 	hookman = pyxhook.HookManager()
 	hookman.KeyDown = keyDownEvent #Bind keydown and keyup events
 	hookman.KeyUp = keyUpEvent
 	hookman.HookKeyboard()
-	hookman.start() #Start event listener
+
+	#Start event listener
+	hookman.start()
+
+	#Initialize workflows list
+	global workflows
+	workflows = []
+
+	#Load all the workflows from settings
+	loadWorkflows()
+
+	#Start infinite loop
 	running = True
-	while running: #Stall
-		time.sleep(.1)
-	hookman.cancel() #Close listener
+	while running: 
+		time.sleep(.1) #sleep for .1 seconds
+
+	hookman.cancel() #Close listener when done

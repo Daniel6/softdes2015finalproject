@@ -16,9 +16,7 @@ def anonymous_Upload(image):
 		}
 	)
 	x = json.loads(response.text)
-	clipboard = gtk.clipboard_get()
-	clipboard.set_text(x['data']['link'])
-	clipboard.store()
+	return x['data']['link']
 
 if __name__ == "__main__":
 	anonymous_Upload("screenshot.png")
