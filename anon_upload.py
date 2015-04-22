@@ -12,7 +12,8 @@ def anonymous_Upload(image):
 		data={'image': b64encode(open('screenshot.png', 'rb').read()),
 			'type': 'base64',
 			'name': 'screenshot.png',
-			'title': 'Picture no. 1'
+			'title': 'Picture no. 1',
+			'description': 'Description'
 		}
 	)
 	x = json.loads(response.text)
