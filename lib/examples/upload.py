@@ -9,7 +9,7 @@
 '''
 
 import sys
-sys.path.append("./lib/imgur_examples")
+sys.path.append("./lib/examples")
 
 # Pull authentication from the auth example
 from auth import authenticate
@@ -18,7 +18,7 @@ from datetime import datetime
 album = None # You can also enter an album ID here
 image_path = 'Kitten.jpg'
 
-def upload_kitten(client):
+def upload(client):
 	# Here's the metadata for the upload. All of these are optional, including
 	# this config dict itself.
 	config = {
@@ -39,7 +39,7 @@ def upload_kitten(client):
 # If you want to run this as a standalone script
 if __name__ == "__main__":
 	client = authenticate()
-	image = upload_kitten(client)
+	image = upload(client)
 
 	print("Image was posted!")
 	print("You can find it here: {0}".format(image['link']))
