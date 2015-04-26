@@ -8,7 +8,7 @@ from anon_upload import anonymous_Upload
 from EDIT1 import *
 
 def keyDownEvent(event):
-	print event.ScanCode 
+	print event.Key 
 	if event.ScanCode == 37: #If the scan code matches left control, signal that the ctrl button is pressed	
 		global ctrl
 		ctrl = True
@@ -36,7 +36,7 @@ def keyUpEvent(event):
 
 def workflow1(): #Workflow #1
 	subprocess.call(["python2", "./capture.py"]) #Spawn a new process that takes a screenshot
-	edit()
+	edit("SCREENSHOT")
 	anonymous_Upload("SCREENSHOT")
 
 if __name__ == "__main__":
@@ -44,6 +44,7 @@ if __name__ == "__main__":
 	hookman.KeyDown = keyDownEvent #Bind keydown and keyup events
 	hookman.KeyUp = keyUpEvent
 	hookman.HookKeyboard()  
+
 	hookman.start() #Start event listener
 	running = True
 	while running: #Stall

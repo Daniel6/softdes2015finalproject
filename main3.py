@@ -9,11 +9,15 @@ from EDIT1 import *
 124
 
 class hotkey(object):
-	def __init__(self,A=49,B=50,C=51,D=52):
-		self.A=ord(str(A))
-		self.B=ord(str(B))
-		self.C=ord(str(C))
-		self.D=ord(str(D))
+	def __init__(self,A=1,B=2,C=3,D=4):
+		self.A=A
+		self.B=B
+		self.C=C
+		self.D=D
+		# self.A=ord(str(A))
+		# self.B=ord(str(B))
+		# self.C=ord(str(C))
+		# self.D=ord(str(D))
 		print self.A,self.B,self.C,self.D
 		print A,B,C,D
 		self.modifier_1 = False
@@ -30,18 +34,17 @@ class hotkey(object):
 		hookman.cancel() #Close listener
 
 	def keyDownEvent(self, event):
-		print event.Ascii
-		# print event.keyval
-		if event.Ascii == self.A:
+		print event.Key
+		if event.Key == self.A:
 			self.modifier_1 = True
 
-		if event.Ascii == self.B:
+		if event.Key == self.B:
 			self.modi124fier_2 = True
 
-		if event.Ascii == self.C:
+		if event.Key == self.C:
 			self.running =  False
 
-		if event.Ascii == self.D:
+		if event.Key == self.D:
 			if self.modifier_1 and self.modifier_2:
 				print("Running Workflow #1")
 				workflow1()
@@ -55,7 +58,7 @@ class hotkey(object):
 
 def workflow1(): #Workflow #1
 	subprocess.call(["python2", "./capture.py"]) #Spawn a new process that takes a screenshot
-	edit("SCREENSHOT")
+	edit()
 	anonymous_Upload("SCREENSHOT")
 
 

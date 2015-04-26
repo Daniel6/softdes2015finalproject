@@ -7,6 +7,9 @@ import pygtk
 pygtk.require('2.0')
 import gtk
 from hotkey_selection import hotkey_selection
+import filechooser
+
+
 class Table:
     # Our callback.
     # The data passed to this method is printed to stdout
@@ -24,7 +27,10 @@ class Table:
     def screenshot(self, widget, event, data=None): 
         screenshot() 
         edit()
-  
+        
+    def filechooser(self, widget, data=None):
+        filechooser.filechooser()
+
     def keyEvent(self, widget, ev, data=None):
         if ev.keyval == 65307:
             print "QUITTING SCREENSHOT"
@@ -84,6 +90,16 @@ class Table:
         table.attach(button, 0, 2, 1, 2)
         button.show()
 
+
+        button = gtk.Button("Local Image")
+        # When the button is clicked, we call the "callback" method
+        # with a pointer to "button 2" as its argument
+        button.connect("clicked", self.filechooser)
+        # Insert button 2 into the upper right quadrant of the table
+        table.attach(button, 0, 2, 2, 3)
+
+        button.show()
+
         # Create "Quit" button
         button = gtk.Button("Quit")
 
@@ -91,7 +107,7 @@ class Table:
         # and the program exits
         button.connect("clicked", lambda w: gtk.main_quit())
         # Insert the quit button into the both lower quadrants of the table
-        table.attach(button, 0, 2, 2, 3)
+        table.attach(button, 0, 2, 3, 4)
 
         button.show()
 

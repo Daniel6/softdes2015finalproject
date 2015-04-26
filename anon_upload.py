@@ -9,9 +9,9 @@ def anonymous_Upload(image):
 	response = requests.post(
 		"https://api.imgur.com/3/upload.json", 
 		headers={"Authorization": "Client-ID a21509ca229e76a"},
-		data={'image': b64encode(open('SCREENSHOT', 'rb').read()),
+		data={'image': b64encode(open(image, 'rb').read()),
 			'type': 'base64',
-			'name': 'SCREENSHOT',
+			'name': image,
 			'title': 'Picture no. 1'
 		}
 	)

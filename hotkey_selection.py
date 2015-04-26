@@ -7,6 +7,7 @@ pygtk.require('2.0')
 import gtk
 import main1
 
+
 class Table:
     # Our callback.
     # The data passed to this method is printed to stdout
@@ -160,3 +161,18 @@ if __name__ == "__main__":
     # Table()
     # main()
     hotkey_selection()
+
+
+
+    # #Initializing Model, View, Controlller
+    # hotkey_model = model()
+    # hotkey_view = view(hotkey_model)
+    # hotkey_controller = controller(hotkey_model)
+
+    # #Main Loop:
+    # while true:
+    #     if hotkey_controller.get_user_input():
+    #         break
+    #     else:
+    #         hotkey_view.display()
+
