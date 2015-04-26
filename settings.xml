@@ -1,37 +1,13 @@
 <?xml version="1.0" ?>
 <settings>
   <destination>imgur_anon</destination>
-  <num_workflows>5</num_workflows>
+  <num_workflows>1</num_workflows>
   <workflows>
     <workflow1>
-      <hotkeys>Control_L+Shift_L+4</hotkeys>
+      <hotkeys>Control_L+Shift_L+dollar</hotkeys>
       <capture_method>def_rect</capture_method>
       <after_capture>upload</after_capture>
-      <after_upload>copy_to_clipboard</after_upload>
+      <after_upload>copy_link_to_clipboard</after_upload>
     </workflow1>
-    <workflow2>
-      <hotkeys>Control_L+Shift_L+4</hotkeys>
-      <capture_method>def_rect</capture_method>
-      <after_capture>upload</after_capture>
-      <after_upload>copy_to_clipboard</after_upload>
-    </workflow2>
-    <workflow3>
-      <hotkeys>Control_L+Shift_L+4</hotkeys>
-      <capture_method>def_rect</capture_method>
-      <after_capture>upload</after_capture>
-      <after_upload>copy_to_clipboard</after_upload>
-    </workflow3>
-    <workflow4>
-      <hotkeys>Control_L+Shift_L+4</hotkeys>
-      <capture_method>def_rect</capture_method>
-      <after_capture>upload</after_capture>
-      <after_upload>copy_to_clipboard</after_upload>
-    </workflow4>
-    <workflow5>
-      <hotkeys>Control_L+Shift_L+4</hotkeys>
-      <capture_method>def_rect</capture_method>
-      <after_capture>upload</after_capture>
-      <after_upload>copy_to_clipboard</after_upload>
-    </workflow5>
   </workflows>
 </settings>

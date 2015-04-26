@@ -63,7 +63,7 @@ class ZoneDesignator():
 			True, 0, 0, self.width, self.height)
 
 	def keyEvent(self, widget, ev, data=None):
-		if ev.keyval == 65307:
+		if ev.keyval == 65307: #Exit when user presses ESC
 			gtk.main_quit()
 			
 

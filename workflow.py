@@ -2,6 +2,7 @@ from xml.etree import ElementTree
 from xml.dom import minidom
 from capture import takeScreenshot
 from anon_upload import anonymous_Upload
+import gtk
 import subprocess
 
 class Workflow(object):
@@ -18,6 +19,7 @@ class Workflow(object):
 		self.after_upload = self.subsettings.find('after_upload').text.split(',')
 
 		self.keys = [False for key in self.hotkeys]
+		self.URL = ""
 
 	def run(self):
 		#Handle different capture methods
@@ -26,19 +28,24 @@ class Workflow(object):
 
 		#Handle things to do after capturing
 		for action in self.after_capture:
-			if self.after_capture == "upload":
+			print(action)
+			if action == "upload":
+				print(self.destination)
 				if self.destination == "imgur_anon":
-					URL = anonymous_Upload("screenshot.png")
-			if self.after_capture == "edit":
+					print("uplaoding image")
+					self.URL = anonymous_Upload("screenshot.png")
+			elif action == "edit":
 				#Edit image
 				pass
 		
 
 		#Handle things to do after uploading
-		if self.after_upload == "copy_link_to_clipboard":
-			clipboard = gtk.clipboard_get()
-			clipboard.set_text(URL)
-			clipboard.store()
+		for action in self.after_upload:
+			if action == "copy_link_to_clipboard":
+				print('Copying to clipboard')
+				clipboard = gtk.clipboard_get()
+				clipboard.set_text(self.URL)
+				clipboard.store()
 
 	def keyDown(self, key):
 		if key in self.hotkeys:
