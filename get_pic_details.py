@@ -1,9 +1,20 @@
 # import pygtk
+import sys
+sys.path.insert(1, './lib/pyxhook')
+import pyxhook
 import gtk
 import time
+from multiprocessing import Process
 
 class ImageDetailPrompt(object):
 	def __init__(self):
+		self.hookman = pyxhook.HookManager()
+		self.hookman.KeyDown = self.keyDownEvent #Bind keydown and keyup events
+		self.hookman.KeyUp = self.keyUpEvent
+		self.hookman.HookKeyboard()
+		self.hookman.start()
+
+
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.set_title('Image Details')
 		self.window.set_position(gtk.WIN_POS_CENTER)
@@ -43,10 +54,23 @@ class ImageDetailPrompt(object):
 		self.description.select_region(0, len(self.description.get_text()))
 
 	def delete_event(self, widget, event):
+		self.hookman.cancel() #Close listener when done
 		gtk.main_quit()
 
 	def start(self):
 		gtk.main()
 
-prompt = ImageDetailPrompt()
-prompt.start()
+	def keyUpEvent(self, event):
+		print(event.Key)
+
+	def keyDownEvent(self, event):
+		print(event.Key)
+		if self.title.has_focus():
+			self.title.insert_text(event.Key, len(self.title.get_text()))
+
+def gui_target():
+	prompt = ImageDetailPrompt()
+	prompt.start()
+
+if __name__ == "__main__":
+	gui_process = Process(target=gui_target)
