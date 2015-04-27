@@ -4,6 +4,7 @@ import sys
 sys.path.insert(1, './lib/pyxhook')
 import pyxhook
 from workflow import Workflow
+from get_settings import SettingsPrompt
 
 def keyDownEvent(event):
 	print "Ascii: " + str(event.Ascii) + " Scan Code: " + str(event.ScanCode) + " Key Val: " + str(event.Key)
@@ -32,6 +33,10 @@ def loadWorkflows():
 		workflows.append(workflow)
 
 if __name__ == "__main__":
+
+	settingsMenu = SettingsPrompt()
+	settingsMenu.start()
+
 	#Setup Hooks into keyboard
 	hookman = pyxhook.HookManager()
 	hookman.KeyDown = keyDownEvent #Bind keydown and keyup events

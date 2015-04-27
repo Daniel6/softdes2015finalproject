@@ -1,13 +1,11 @@
-<?xml version="1.0" ?>
 <settings>
-  <destination>imgur_anon</destination>
-  <num_workflows>1</num_workflows>
-  <workflows>
-    <workflow1>
-      <hotkeys>Control_L+Shift_L+dollar</hotkeys>
-      <capture_method>def_rect</capture_method>
-      <after_capture>upload</after_capture>
-      <after_upload>copy_link_to_clipboard</after_upload>
-    </workflow1>
-  </workflows>
+	<destination>imgur_anon</destination>
+	<workflows>
+		<workflow1>
+			<hotkeys />
+			<capture_method>def_rect</capture_method>
+			<after_capture />
+			<after_upload />
+		</workflow1>
+	</workflows>
 </settings>
