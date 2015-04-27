@@ -29,7 +29,7 @@ class SettingsPrompt(object):
 		self.ctrl_mod = gtk.ToggleButton(label='Ctrl')
 		self.shift_mod = gtk.ToggleButton(label='Shift')
 		self.alt_mod = gtk.ToggleButton(label='Alt')
-		self.hotkey = gtk.Entry(max=1)
+		self.hotkey = gtk.Entry(max=10)
 		self.add_label1 = gtk.Label(str='+')
 		self.add_label2 = gtk.Label(str='+')
 		self.add_label3 = gtk.Label(str='+')
