@@ -8,17 +8,14 @@
 		https://api.imgur.com/endpoints/image
 '''
 
-import sys
-sys.path.append("./lib/examples")
-
 # Pull authentication from the auth example
 from auth import authenticate
 from datetime import datetime
 
-album = None # You can also enter an album ID here
-image_path = 'Kitten.jpg'
+def upload(image_path):
+	client = authenticate()
 
-def upload(client):
+	album = None # You can also enter an album ID here
 	# Here's the metadata for the upload. All of these are optional, including
 	# this config dict itself.
 	config = {
@@ -31,15 +28,10 @@ def upload(client):
 	print("Uploading image... ")
 	image = client.upload_from_path(image_path, config=config, anon=False)
 	print("Done")
-	print()
-
-	return image
-
-
-# If you want to run this as a standalone script
-if __name__ == "__main__":
-	client = authenticate()
-	image = upload(client)
 
 	print("Image was posted!")
 	print("You can find it here: {0}".format(image['link']))
+
+# If you want to run this as a standalone script
+if __name__ == "__main__":
+	upload("Kitten.jpg")
