@@ -1,10 +1,12 @@
 from xml.etree import ElementTree
 from xml.dom import minidom
 import sys
+import os
 sys.path.insert(1, './lib/pyxhook')
 import pyxhook
 import gtk
 import time
+import subprocess
 from multiprocessing import Process, Queue
 
 class SettingsPrompt(object):
@@ -30,6 +32,7 @@ class SettingsPrompt(object):
 		self.shift_mod = gtk.ToggleButton(label='Shift')
 		self.alt_mod = gtk.ToggleButton(label='Alt')
 		self.hotkey = gtk.Entry(max=10)
+		# self.hotkey.connect('key-press-event', self.hotkey_key_pressed)
 		self.add_label1 = gtk.Label(str='+')
 		self.add_label2 = gtk.Label(str='+')
 		self.add_label3 = gtk.Label(str='+')
@@ -74,20 +77,43 @@ class SettingsPrompt(object):
 		self.after_upload_label.show()
 		self.copy_link_option.show()
 
+		self.save_button = gtk.Button(label='Save')
+		self.save_button.connect('button-press-event', self.save_button_pressed)
+		self.vbox.pack_end(self.save_button, False, False, 2)
+		self.save_button.show()
 		self.window.show()
 
+		self.startListener()
+
+	def hotkey_key_pressed(self, widget, event):
+		pass
+		# self.pipe.stdin.write(".")
+		# self.pipe.stdin.flush()
+		# print self.pipe.stdout.readline(),
+
+	def startListener(self):
+		#Open listener in new process
+		subprocess.Popen(["/usr/bin/python2.7", "./listener.py"])
+		# self.pipe = subprocess.Popen(["/usr/bin/python2.7", "./listener.py"], stdin = subprocess.PIPE, stdout = subprocess.PIPE, bufsize=1)
+
+	def save_button_pressed(self, widget, event):
+		self.save_xml()
+
 	def delete_event(self, widget, event):
-		root = ElementTree.parse('settings.xml').getroot()
-		root.find('workflows').find('workflow1').find('after_capture').text = self.get_after_capture_functions()
-		root.find('workflows').find('workflow1').find('after_upload').text = self.get_after_upload_functions()
-		root.find('workflows').find('workflow1').find('hotkeys').text = self.get_hotkey()
-		self.save_xml(root)
+		# self.pipe.communicate()[0]
+		# self.pipe.stdin.close()
+		self.save_xml()
+		os.system("pkill python -15")
 		gtk.main_quit()
 
 	def start(self):
 		gtk.main()
 
-	def save_xml(self, root):
+	def save_xml(self):
+		root = ElementTree.parse('settings.xml').getroot()
+		root.find('workflows').find('workflow1').find('after_capture').text = self.get_after_capture_functions()
+		root.find('workflows').find('workflow1').find('after_upload').text = self.get_after_upload_functions()
+		root.find('workflows').find('workflow1').find('hotkeys').text = self.get_hotkey()
 		f = open("settings.xml", "w")
 		f.write(ElementTree.tostring(root))
 		f.close()
