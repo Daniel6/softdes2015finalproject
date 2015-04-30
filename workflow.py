@@ -41,12 +41,9 @@ class Workflow(object):
 		if all(key is True for key in self.keys): #If all keys are held down, run workflow
 			self.run()
 
-		print(self.keys)
-
 	def keyUp(self, key):
 		if key in self.hotkeys:
 			self.keys[self.hotkeys.index(key)] = False
-		# print(self.keys)
 
 	def updateSettings(self):
 		self.settings = ElementTree.parse('settings.xml').getroot()

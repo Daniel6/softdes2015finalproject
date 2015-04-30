@@ -6,13 +6,18 @@ import pyxhook
 from workflow import Workflow
 
 def keyDownEvent(event):
-	print "Ascii: " + str(event.Ascii) + " Scan Code: " + str(event.ScanCode) + " Key Val: " + str(event.Key)
+	# print "Ascii: " + str(event.Ascii) + " Scan Code: " + str(event.ScanCode) + " Key Val: " + str(event.Key)
+	# output = sys.stdout
+	# output.write(str(event.Key))
+	# output.flush()
+	print(event.Key)
+	sys.stdout.flush()
 	for flow in workflows:
 		flow.keyDown(event.Key)
 
-	if event.Key == "space": #exit program when spacebar pressed
-		global running
-		running =  False
+	# if event.Key == "space": #exit program when spacebar pressed
+	# 	global running
+	# 	running =  False
 
 def keyUpEvent(event):
 	for flow in workflows:

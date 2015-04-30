@@ -2,12 +2,12 @@ from xml.etree import ElementTree
 from xml.dom import minidom
 import sys
 import os
-sys.path.insert(1, './lib/pyxhook')
-import pyxhook
+sys.path.insert(1, './lib')
+import asynchronous_file_reader
 import gtk
 import time
+import Queue
 import subprocess
-from multiprocessing import Process, Queue
 
 class SettingsPrompt(object):
 	def __init__(self):
@@ -28,27 +28,10 @@ class SettingsPrompt(object):
 		self.vbox.show()
 		self.hbox.show()
 
-		self.ctrl_mod = gtk.ToggleButton(label='Ctrl')
-		self.shift_mod = gtk.ToggleButton(label='Shift')
-		self.alt_mod = gtk.ToggleButton(label='Alt')
-		self.hotkey = gtk.Entry(max=10)
-		# self.hotkey.connect('key-press-event', self.hotkey_key_pressed)
-		self.add_label1 = gtk.Label(str='+')
-		self.add_label2 = gtk.Label(str='+')
-		self.add_label3 = gtk.Label(str='+')
-		self.hbox.pack_start(self.alt_mod, False, False, 5)
-		self.hbox.pack_start(self.add_label1, False, False, 0)
-		self.hbox.pack_start(self.ctrl_mod, False, False, 5)
-		self.hbox.pack_start(self.add_label2, False, False, 0)
-		self.hbox.pack_start(self.shift_mod, False, False, 5)
-		self.hbox.pack_start(self.add_label3, False, False, 0)
+		self.hotkey = gtk.Entry(max=0)
+		self.hotkey.connect('focus-in-event', self.startListening)
+		self.hotkey.set_editable(False)
 		self.hbox.pack_start(self.hotkey, False, False, 5)
-		self.alt_mod.show()
-		self.ctrl_mod.show()
-		self.shift_mod.show()
-		self.add_label1.show()
-		self.add_label2.show()
-		self.add_label3.show()
 		self.hotkey.show()
 
 		self.after_capture_label = gtk.Label(str='What to do after capturing image')
@@ -82,27 +65,48 @@ class SettingsPrompt(object):
 		self.vbox.pack_end(self.save_button, False, False, 2)
 		self.save_button.show()
 		self.window.show()
-
 		self.startListener()
+		self.count = 0
 
-	def hotkey_key_pressed(self, widget, event):
-		print >>self.pipe.stdin, 1
-		self.pipe.stdin.flush()
-		# print(self.pipe.stdout.readline())
-		# print self.pipe.stdout.readline(),
+	def startListening(self, widget, event):
+		print("Started Listening")
+		self.hotkey.set_text("")
+		self.save_xml()
+		running = True
+		while not self.stdout_reader.eof():
+
+			while not self.stdout_queue.empty():
+				self.count += 1
+				out = (self.stdout_queue.get())
+				print(out.rstrip())
+				if out == "Return\n":
+					print("Stopping")
+					running = False
+					break
+				if self.count > 3: #Ignore first three messages
+					print("Adding key")
+					self.hotkey.set_text(self.hotkey.get_text() + out.rstrip() + "+")
+				else:
+					print(self.count)
+				
+			if not running:
+				break
+			time.sleep(.02)
+
+		self.count = 3 #Reset to 3 instead of 0 so that we don't ignore the first three outputs next time
+		print("Done Listening")
 
 	def startListener(self):
 		#Open listener in new process
-		subprocess.Popen(["/usr/bin/python2.7", "./listener.py"])
-		# self.pipe = subprocess.Popen(["/usr/bin/python2.7", "./listener.py"], stdin = subprocess.PIPE, stdout = subprocess.PIPE, bufsize=1)
+		self.listener_process = subprocess.Popen(["/usr/bin/python2.7", "./listener.py"], stdout = subprocess.PIPE, stderr = subprocess.STDOUT, bufsize=1)
+		self.stdout_queue = Queue.Queue()
+		self.stdout_reader = asynchronous_file_reader.AsynchronousFileReader(self.listener_process.stdout, self.stdout_queue)
+		self.stdout_reader.start()
 
 	def save_button_pressed(self, widget, event):
 		self.save_xml()
 
 	def delete_event(self, widget, event):
-		# self.pipe.communicate()[0]
-		# self.pipe.stdin.close()
-		self.save_xml()
 		os.system("pkill python -15")
 		gtk.main_quit()
 
@@ -124,24 +128,16 @@ class SettingsPrompt(object):
 			function = "edit,"
 		if self.upload_option.get_active():
 			function = function + "upload,"
-		return function
+		return function[:-1]
 
 	def get_after_upload_functions(self):
 		function = ""
 		if self.copy_link_option.get_active():
 			function = function + "copy_link_to_clipboard,"
-		return function
+		return function[:-1]
 
 	def get_hotkey(self):
-		hotkey_string = ""
-		if self.alt_mod.get_active():
-			hotkey_string = "Alt_L+" + hotkey_string
-		if self.ctrl_mod.get_active():
-			hotkey_string = hotkey_string + "Control_L+"
-		if self.shift_mod.get_active():
-			hotkey_string = hotkey_string + "Shift_L+"
-		hotkey_string = hotkey_string + self.hotkey.get_text()
-		return hotkey_string
+		return self.hotkey.get_text()[:-1]
 
 if __name__ == "__main__":
 	prompt = SettingsPrompt()
