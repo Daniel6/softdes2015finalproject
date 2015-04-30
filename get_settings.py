@@ -86,9 +86,9 @@ class SettingsPrompt(object):
 		self.startListener()
 
 	def hotkey_key_pressed(self, widget, event):
-		pass
-		# self.pipe.stdin.write(".")
-		# self.pipe.stdin.flush()
+		print >>self.pipe.stdin, 1
+		self.pipe.stdin.flush()
+		# print(self.pipe.stdout.readline())
 		# print self.pipe.stdout.readline(),
 
 	def startListener(self):
