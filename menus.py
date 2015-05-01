@@ -11,6 +11,8 @@ import subprocess
 
 class MainMenu(object):
 	def __init__(self):
+		self.destinationsMenu = DestinationsMenu()
+
 		self.init_Window()
 		self.init_Buttons()
 
@@ -42,7 +44,7 @@ class MainMenu(object):
 		self.settingsMenu.start()
 
 	def openDestinations(self, widget, event):
-		pass
+		self.destinationsMenu.start()
 
 	def manCapture(self, widget, event):
 		subprocess.call(["/usr/bin/python2.7", "./capture.py"])
@@ -215,6 +217,66 @@ class SettingsMenu(object):
 
 	def get_hotkey(self):
 		return self.hotkey.get_text()[:-1]
+
+class DestinationsMenu(object):
+	def __init__(self):
+		self.init_Window()
+		self.init_Buttons()
+
+	def start(self):
+		self.window.show()
+		gtk.main()
+
+	def init_Window(self):
+		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+		self.window.connect("delete_event", self.delete_event)
+		self.hbox = gtk.HBox()
+		self.window.add(self.hbox)
+		self.window.set_border_width(10)
+		self.hbox.show()
+
+	def init_Buttons(self):
+		self.icon_width = 150
+		self.icon_height = 150
+
+		self.imgur_Button = self.makeButton(self.icon_width, self.icon_height, "./res/imgur.jpg")
+		self.twitter_Button = self.makeButton(self.icon_width, self.icon_height, "./res/twitter.png")
+		self.dropbox_Button = self.makeButton(self.icon_width, self.icon_height, "./res/dropbox.png")
+
+		self.hbox.pack_start(self.imgur_Button, False, False, 1)
+		self.hbox.pack_start(self.twitter_Button, False, False, 1)
+		self.hbox.pack_start(self.dropbox_Button, False, False, 1)
+
+		self.imgur_Button.connect("button-press-event", self.setDest, "imgur")
+		self.twitter_Button.connect("button-press-event", self.setDest, "twitter")
+		self.dropbox_Button.connect("button-press-event", self.setDest, "dropbox")
+
+		self.imgur_Button.show()
+		self.twitter_Button.show()
+		self.dropbox_Button.show()
+
+	def makeButton(self, width, height, file_name):
+		desired_width = width
+		desired_height = height
+		pixbuf = gtk.gdk.pixbuf_new_from_file(file_name)
+		pixbuf = pixbuf.scale_simple(desired_width, desired_height, gtk.gdk.INTERP_BILINEAR)
+		icon = gtk.image_new_from_pixbuf(pixbuf)
+		icon.show()
+		button = gtk.Button()
+		button.add(icon)
+
+		return button
+
+	def setDest(self, widget, event, dest):
+		root = ElementTree.parse('settings.xml').getroot()
+		root.find('destination').text = dest
+		f = open("settings.xml", "w")
+		f.write(ElementTree.tostring(root))
+		f.close()
+
+	def delete_event(self, widget, event):
+		self.window.hide()
+		return True
 
 if __name__ == "__main__":
 	menu = SettingsMenu()
