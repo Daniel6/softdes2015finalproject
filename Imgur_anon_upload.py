@@ -12,13 +12,12 @@ def anonymous_Upload(image):
 		data={'image': b64encode(open(image, 'rb').read()),
 			'type': 'base64',
 			'name': image,
-			'title': 'Picture no. 1'
+			'title': 'Picture no. 1',
+			'description': 'Description'
 		}
 	)
 	x = json.loads(response.text)
-	clipboard = gtk.clipboard_get()
-	clipboard.set_text(x['data']['link'])
-	clipboard.store()
+	return x['data']['link']
 
 if __name__ == "__main__":
-	anonymous_Upload("SCREENSHOT")
+	print anonymous_Upload("screenshot.png")

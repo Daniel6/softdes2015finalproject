@@ -5,9 +5,12 @@
 import pygtk
 pygtk.require('2.0')
 import gtk
+# import Twitter_API
+import SNS_Platform
 
 class sns_selection(object):
-    def __init__(self):
+    def __init__(self, filename):
+        self.filename=filename
         # create the main window, and attach delete_event signal to terminating
         # the application
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
@@ -20,11 +23,11 @@ class sns_selection(object):
         self.hbox.show()
         window.add(self.hbox)
 
-        self.button('twitter.png')
-        self.button('dropbox.png')
-        self.button("imgur.jpg")
+        self.button('twitter.png', "twitter")
+        self.button('dropbox.png',"dropbox")
+        self.button("imgur.jpg","imgur")
 
-    def button(self,file_name):
+    def button(self,file_name, data):
         desired_width = 150
         desired_height = 150
         pixbuf = gtk.gdk.pixbuf_new_from_file(file_name)
@@ -36,7 +39,12 @@ class sns_selection(object):
         button.add(image)
         button.show()
         self.hbox.pack_start(button)
-        button.connect("clicked", self.button_clicked, "1")
+        if data=="twitter":
+            button.connect("clicked", self.button_clicked, "twitter")
+        elif data=="dropbox":
+            button.connect("clicked", self.button_clicked, "dropbox")
+        elif data=="imgur":
+            button.connect("clicked", self.button_clicked, "imgur")
 
 
 
@@ -49,7 +57,9 @@ class sns_selection(object):
 
     # is invoked when the button is clicked.  It just prints a message.
     def button_clicked(self, widget, data=None):
+        SNS_Platform.Statusbar_Running(data,self.filename)
         print "button %s clicked" % data
+        gtk.main_quit()
 
 
 
@@ -59,5 +69,6 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    sns_selection()
+    filename="test.jpg"
+    sns_selection(filename)
     main()

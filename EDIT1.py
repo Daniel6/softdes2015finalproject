@@ -138,7 +138,7 @@ class Edit_image(object):
         print("Save Image")
         pixbuf1 = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, has_alpha=False, bits_per_sample=8, width=widget.allocation.width, height=widget.allocation.height)
         pixbuf1.get_from_drawable(self.pixmap, self.pixmap.get_colormap(), 0, 0, 0, 0, widget.allocation.width, widget.allocation.height)
-        pixbuf1.save(self.filename, "jpeg", {"quality":"100"})
+        pixbuf1.save(self.filename, "gif", {"quality":"100"})
 
     def delete_event(self, widget, event, data=None):
         gtk.main_quit()

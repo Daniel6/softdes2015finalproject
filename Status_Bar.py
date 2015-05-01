@@ -8,19 +8,27 @@ import gtk
 
 class StatusbarExample:
     
-    def push_item(self, widget, data):
-        print data
+    def push_item(self, context_id, text):
         # buff = " Item %d" % self.count
         # self.count = self.count + 1
-        # self.status_bar.push(data, buff)
-        return
+        # print type(context_id)
+        self.status_bar.push(self.context_id, text)
+        entry_text = self.entry.get_text()
+        print entry_text
+        return entry_text
 
     def pop_item(self, widget, data):
         self.status_bar.pop(data)
         return
-    def enter_callback(self, widget, entry):
-        entry_text = entry.get_text()
-        print "Entry contents: %s\n" % entry_text
+
+    # def enter_callback(self, widget, data):
+    #     buff=data
+    #     entry_text = self.entry.get_text()
+    #     print "Entry contents: %s\n" % entry_text
+    #     self.entry.set_text("")
+    #     context_id = self.status_bar.get_context_id("Statusbar example")
+    #     self.status_bar.push(context_id, buff)
+
     def __init__(self):
         # self.count = 1
         # create a new window
@@ -39,7 +47,9 @@ class StatusbarExample:
         
         self.status_bar.show()
 
-        context_id = self.status_bar.get_context_id("Statusbar example")
+        # context_id = self.status_bar.get_context_id("Statusbar example")
+        self.context_id=self.status_bar.get_context_id("Statusbar example")
+        # self.status_bar.push(context_id, buff)
 
         # button = gtk.Button("push item")
         # button.connect("clicked", self.push_item, context_id)
@@ -50,16 +60,21 @@ class StatusbarExample:
         # button.connect("clicked", self.pop_item, context_id)
         # vbox.pack_start(button, True, True, 2)
         # button.show()              
+        self.entry = gtk.Entry()
+   
+        text="Title"
+        self.push_item(self.context_id, text)
 
-        entry = gtk.Entry()
-        entry.set_max_length(50)
-        entry.connect("activate", self.push_item, context_id)
-        entry.set_text("hello")
-        entry.insert_text(" world", len(entry.get_text()))
-        entry.select_region(0, len(entry.get_text()))
-        vbox.pack_start(entry, True, True, 0)
-        entry.show()
+        text="Description"
+        
 
+        self.entry.connect("activate", self.push_item,text)
+
+        # self.entry.select_region(0, len(self.entry.get_text()))
+        vbox.pack_start(self.entry, True, True, 0)
+        self.entry.show()
+
+        # self.enter_callback("Title")
 
         # always display the window as the last step so it all splashes on
         # the screen at once.

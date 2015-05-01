@@ -6,7 +6,8 @@ import pyxhook
 from capture import takeScreenshot
 from anon_upload import anonymous_Upload
 from EDIT1 import *
-
+ctrl=False
+shift=False
 def keyDownEvent(event):
 	print event.Key 
 	if event.ScanCode == 37: #If the scan code matches left control, signal that the ctrl button is pressed	
