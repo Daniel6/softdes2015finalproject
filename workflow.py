@@ -1,6 +1,5 @@
 from xml.etree import ElementTree
 from xml.dom import minidom
-from capture import takeScreenshot
 from anon_upload import anonymous_Upload
 from edit_image import edit
 import gtk
@@ -20,7 +19,7 @@ class Workflow(object):
 
 		#Handle things to do after capturing
 		if "edit" in self.after_capture:
-			edit()
+			edit("screenshot.png")
 		if "upload" in self.after_capture:
 			if self.destination == "imgur_anon":
 				self.URL = anonymous_Upload("screenshot.png")
