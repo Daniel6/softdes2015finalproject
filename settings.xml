@@ -3,10 +3,10 @@
 	<num_workflows>1</num_workflows>
 	<workflows>
 		<workflow1>
-			<hotkeys />
+			<hotkeys>Control_L+Shift_L+dollar</hotkeys>
 			<capture_method>def_rect</capture_method>
-			<after_capture />
-			<after_upload />
+			<after_capture>edit,upload</after_capture>
+			<after_upload>copy_link_to_clipboard</after_upload>
 		</workflow1>
 	</workflows>
 </settings>

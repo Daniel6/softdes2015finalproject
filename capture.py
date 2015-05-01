@@ -4,6 +4,7 @@ import sys
 sys.path.insert(0, './lib/pyxhook')
 import pyxhook
 import Image
+import Tkinter
 from Xlib import display
 
 class ZoneDesignator():
@@ -45,8 +46,10 @@ class ZoneDesignator():
 							| gtk.gdk.POINTER_MOTION_MASK
 							| gtk.gdk.POINTER_MOTION_HINT_MASK)
 
+	def start(self):
 		self.window.present()
 		self.window.show_all()
+		gtk.main()
 
 	def exposeEvent(self, widget, ev):
 		x , y, width, height = ev.area
@@ -96,20 +99,31 @@ class ZoneDesignator():
 		pos = display.Display().screen().root.query_pointer()._data
 		return pos["root_x"], pos["root_y"]
 
-def takeScreenshot(pixbuf):
-	myZoneDesignator = ZoneDesignator(pixbuf)
-	gtk.main()
-	try:
-		size = [myZoneDesignator.bottom_right[0]-myZoneDesignator.top_left[0], myZoneDesignator.bottom_right[1]-myZoneDesignator.top_left[1]]
-	except IndexError:
-		sys.exit()
-	screenie = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, size[0], size[1])
-	pixbuf.copy_area(myZoneDesignator.top_left[0], myZoneDesignator.top_left[1], size[0], size[1], screenie, 0, 0)
-	screenie.save("screenshot.png","png")
+class Capturer(object):
+	def __init__(self):
+		self.root = Tkinter.Tk()
+		self.screen_width = self.root.winfo_screenwidth()
+		self.screen_height = self.root.winfo_screenheight()
 
+		self.size = [self.screen_width, self.screen_height]
+
+	def capture(self):
+		self.pixbuf = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, self.size[0], self.size[1])
+		self.pixbuf = self.pixbuf.get_from_drawable(gtk.gdk.get_default_root_window(), gtk.gdk.colormap_get_system(), 0,0,0,0,self.size[0],self.size[1])
+
+		self.zoneDesignator = ZoneDesignator(self.pixbuf)
+
+		self.zoneDesignator.start()
+
+		try:
+			self.size = [self.zoneDesignator.bottom_right[0]-self.zoneDesignator.top_left[0], self.zoneDesignator.bottom_right[1]-self.zoneDesignator.top_left[1]]
+		except IndexError:
+			sys.exit()
+
+		self.screenie = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, self.size[0], self.size[1])
+		self.pixbuf.copy_area(self.zoneDesignator.top_left[0], self.zoneDesignator.top_left[1], self.size[0], self.size[1], self.screenie, 0, 0)
+		self.screenie.save("screenshot.png","png")
 
 if __name__ == "__main__":
-	size = [1600, 900]
-	pb = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, False, 8, size[0], size[1])
-	pb = pb.get_from_drawable(gtk.gdk.get_default_root_window(), gtk.gdk.colormap_get_system(), 0,0,0,0,size[0],size[1])
-	takeScreenshot(pb)
+	myCapturer = Capturer()
+	myCapturer.capture()

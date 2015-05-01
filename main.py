@@ -1,6 +1,6 @@
 import subprocess
-from get_settings import SettingsPrompt
+from menus import MainMenu
 
 if __name__ == "__main__":
-	settingsMenu = SettingsPrompt()
-	settingsMenu.start()
+	menu = MainMenu()
+	menu.start()
