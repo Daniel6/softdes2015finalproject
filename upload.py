@@ -5,6 +5,7 @@ sys.path.insert(1, './lib')
 import dropbox
 import tweetpony
 from base64 import b64encode
+from xml.etree import ElementTree
 
 def imgur_Upload(image):
 	"""Upload an image to imgur anonymously and publicly"""
@@ -56,7 +57,6 @@ def twitter_Upload(file_name, message):
 
 	api = tweetpony.API(consumer_key = consumer_key, consumer_secret = consumer_secret, access_token = access_token, access_token_secret = access_token_secret)
 	user = api.user
-	print "Hello, @%s!" % user.screen_name
 	text = message
 	# text = "test"
 	picture=open(file_name, "r")
