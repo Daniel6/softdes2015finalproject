@@ -1,7 +1,8 @@
 from xml.etree import ElementTree
 from xml.dom import minidom
-from anon_upload import anonymous_Upload
+from upload import imgur_Upload
 from edit_image import edit
+from qr_code import generate_QRCode
 import gtk
 import subprocess
 
@@ -21,8 +22,8 @@ class Workflow(object):
 		if "edit" in self.after_capture:
 			edit("screenshot.png")
 		if "upload" in self.after_capture:
-			if self.destination == "imgur_anon":
-				self.URL = anonymous_Upload("screenshot.png")
+			if self.destination == "imgur":
+				self.URL = imgur_Upload("screenshot.png")
 
 		#Handle things to do after uploading
 		if "copy_link_to_clipboard" in self.after_upload:
@@ -30,6 +31,10 @@ class Workflow(object):
 				clipboard = gtk.clipboard_get()
 				clipboard.set_text(self.URL)
 				clipboard.store()
+		if "generate_qr_code" in self.after_upload:
+			if "upload" in self.after_capture:
+				if self.URL != "":
+					generate_QRCode(self.URL)
 				
 
 	def keyDown(self, key):

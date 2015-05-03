@@ -124,6 +124,7 @@ class SettingsMenu(object):
 		self.after_capture_box = gtk.HBox(False, 0)
 		self.after_capture_label = gtk.Label(str='What to do after capturing image')
 		self.vbox.pack_start(self.after_capture_label, False, False, 2)
+
 		self.upload_option = gtk.ToggleButton(label='Upload')
 		self.edit_option = gtk.ToggleButton(label='Edit')
 		self.after_capture_box.pack_start(self.upload_option, False, False, 0)
@@ -139,12 +140,16 @@ class SettingsMenu(object):
 		self.after_upload_box = gtk.HBox(False, 0)
 		self.after_upload_label = gtk.Label(str='What to do after uploading image')
 		self.vbox.pack_start(self.after_upload_label, False, False, 2)
+
 		self.copy_link_option = gtk.ToggleButton(label='Copy link to clipboard')
+		self.generate_code_option = gtk.ToggleButton(label='Generate QR Code')
 		self.after_upload_box.pack_start(self.copy_link_option, False, False, 0)
+		self.after_upload_box.pack_start(self.generate_code_option, False, False, 0)
 		self.vbox.pack_start(self.after_upload_box, False, False, 0)
 
 		self.after_upload_label.show()
 		self.copy_link_option.show()
+		self.generate_code_option.show()
 		self.after_upload_box.show()
 
 	def init_SaveButton(self):
@@ -213,6 +218,8 @@ class SettingsMenu(object):
 		function = ""
 		if self.copy_link_option.get_active():
 			function = function + "copy_link_to_clipboard,"
+		if self.generate_code_option.get_active():
+			function = function + "generate_qr_code,"
 		return function[:-1]
 
 	def get_hotkey(self):
@@ -230,6 +237,8 @@ class DestinationsMenu(object):
 	def init_Window(self):
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.connect("delete_event", self.delete_event)
+		self.window.set_title('Choose Destination')
+		self.window.set_position(gtk.WIN_POS_CENTER)
 		self.hbox = gtk.HBox()
 		self.window.add(self.hbox)
 		self.window.set_border_width(10)
@@ -273,6 +282,7 @@ class DestinationsMenu(object):
 		f = open("settings.xml", "w")
 		f.write(ElementTree.tostring(root))
 		f.close()
+		self.window.hide()
 
 	def delete_event(self, widget, event):
 		self.window.hide()
