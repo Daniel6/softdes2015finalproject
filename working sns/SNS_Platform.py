@@ -8,6 +8,7 @@ import Dropbox_API
 import dropbox
 import Imgur_anon_upload
 import qr_code
+from xml.etree import ElementTree
 
 class Statusbar(object):
     def Initilize_Register(self,media):
@@ -32,7 +33,7 @@ class Statusbar(object):
 
         elif self.media=="qr":
             self.imgur_url=Imgur_anon_upload.anonymous_Upload(self.filename)
-            qr_code(self.imgur_url)
+            qr_code.generate_QR(self.imgur_url)
             gtk.main_quit()
 
     
@@ -62,34 +63,86 @@ class Statusbar(object):
         self.button.connect_object("clicked", self.button_press_event, text_name)
         self.button.show()
         self.vbox.pack_start(self.button, False,False, 0)
-    
+    def check_authentication(self):
+        flag=0
+        settings = ElementTree.parse('settings.xml').getroot()
+        subsettings = settings.find('authentication').find(self.media)
+        try:
+            key=subsettings.find("access_token")
+            print "key:",key.text
+            secret=subsettings.find("access_token_secret")
+            print "secret:",secret.text
+            if key.text and secret.text:
+                flag=1
+            return (flag,key.text,secret.text)
+        except:
+            pass
+            return (0,None,None)
+
+    def save_authentication(self,access_token,access_token_secret):
+        tree=ElementTree.parse('settings.xml')
+        root=tree.getroot()
+        # settings = ElementTree.parse('settings.xml').getroot()
+        subsettings = tree.find('authentication').find(self.media)
+        atoken = ElementTree.SubElement(subsettings, 'access_token')
+        atoken.text = access_token
+        asecret = ElementTree.SubElement(subsettings, 'access_token_secret')
+        asecret.text = access_token_secret
+        print "writing"
+        tree.write('settings.xml', "UTF-8")
+        # ElementTree.write('settings.xml')
+        
     def button_press_event(self, widget, data=None):
         
         if self.media=="twitter":
             print "authentication:",self.authentication
             print "title:",self.title
             print "description:",self.description
-            Twitter_API2.Twitter_API_Running(self.filename,self.authentication,self.title,self.api)
+
+            storage=self.check_authentication()
+            print 'storage[0]:',storage
+            if storage[0]:
+                access_token=storage[1]
+                access_token_secret=storage[2]
+            else:
+                code=self.authentication
+                self.api.authenticate(code)
+                access_token=self.api.access_token
+                access_token_secret=self.api.access_token_secret
+                self.save_authentication(access_token,access_token_secret)
+
+            print "access_token:",access_token
+            print "access_token_secret:", access_token_secret
+
+            Twitter_API2.Twitter_API_Running(self.filename,access_token,access_token_secret,self.title)
             gtk.main_quit()
- 
+
         if self.media=="dropbox":
-            Dropbox_API.upload(self.filename,self.authentication,self.title,self.flow)
+            storage=self.check_authentication()            
+            if storage[0]:
+                access_token=storage[1]
+                user_id=storage[2]
+            else:
+                code=self.authentication
+                access_token, user_id = self.flow.finish(code) # Creates an access token
+                self.save_authentication(access_token, user_id)
+            Dropbox_API.upload(access_token, user_id, self.filename,self.title,self.flow)
             gtk.main_quit()
         if self.media=="imugr":
             pass
 
     def set_clipboard(self, button):
-        print self.imgur_url
+        # print self.imgur_url)
         text = self.textbuffer.get_text(*self.textbuffer.get_bounds())
-        if self.media=="twitter":
+        # print self.imgur_url
+        # print self.media
+        if self.media=="imgur":
+            self.clipboard.set_text(self.imgur_url)       
+        elif self.media=="twitter":
             self.clipboard.set_text(self.auth_url)
-        if self.media=="dropbox":
+        elif self.media=="dropbox":
             self.clipboard.set_text(self.flow.start())
-        if self.media=="imugr":
-            print self.imgur_url
-            self.clipboard.set_text(self.imgur_url)
-            gtk.main_quit()
-        return
+        # return
     
     def __init__(self, media, filename):
         self.media=media
@@ -170,4 +223,4 @@ def Statusbar_Running(media,filename):
 
 if __name__=="__main__":
     filename="test.jpg"
-    Statusbar_Running("imgur",filename)
+    Statusbar_Running("dropbox",filename)

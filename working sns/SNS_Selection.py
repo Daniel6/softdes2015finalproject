@@ -26,6 +26,7 @@ class sns_selection(object):
         self.button('twitter.png', "twitter")
         self.button('dropbox.png',"dropbox")
         self.button("imgur.jpg","imgur")
+        self.button("qr.png","qr")
 
     def button(self,file_name, data):
         desired_width = 150
@@ -45,6 +46,8 @@ class sns_selection(object):
             button.connect("clicked", self.button_clicked, "dropbox")
         elif data=="imgur":
             button.connect("clicked", self.button_clicked, "imgur")
+        elif data=="qr":
+            button.connect("clicked", self.button_clicked, "qr")
 
 
 

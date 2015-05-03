@@ -6,14 +6,21 @@ app_key = 'uehmy7qwfyhnd34'
 app_secret = 'h1tmocr962j6xfa'
 
 
-def upload(file_name,code,title,flow):
-	# flow = dropbox.client.DropboxOAuth2FlowNoRedirect(app_key, app_secret)
+def upload(title,file_name):
+	flow = dropbox.client.DropboxOAuth2FlowNoRedirect(app_key, app_secret)
 
 	# print flow.start() # Prints the authentication url
 
 	# code = raw_input("Enter the authorization code here: ").strip()
 
-	access_token, user_id = flow.finish(code) # Creates an access token
+	# access_token, user_id = flow.finish(code) # Creates an access token
+	# print "------------------___-----------------------------------------------------------------------------------"
+	# print "access_token:",access_token
+	# print "user_id", user_id
+	# print "------------------___-----------------------------------------------------------------------------------"
+	access_token="8PI1wJknXpkAAAAAAAABzgMk8PKnWV0zzvBC00M67j4HNl0f4dicuI9fQWCB2kA4"
+	user_id="110472014"
+
 	client = dropbox.client.DropboxClient(access_token)
 	print 'linked account: ', client.account_info()
 
@@ -25,4 +32,4 @@ def upload(file_name,code,title,flow):
 	print "uploaded:", response
 
 if __name__ == "__main__":
-	upload('test.jpg')
+	upload("wzcfdfdf",'test.jpg')

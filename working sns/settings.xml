@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<settings>
+	<destination>imgur_anon</destination>
+	<num_workflows>1</num_workflows>
+	<workflows>
+		<workflow1>
+			<hotkeys>Control_L+Shift_L+dollar</hotkeys>
+			<capture_method>def_rect</capture_method>
+			<after_capture>edit,upload</after_capture>
+			<after_upload>copy_link_to_clipboard</after_upload>
+		</workflow1>
+	</workflows>
+	<authentication>
+		<twitter>
+		<access_token>269345705-8IUSiwW1BVOh1cIp2kFEKoLCDKIybFjxtXO3jN3B</access_token><access_token_secret>QiSfoTftKRUGOHgF8zHmGuo52dgdpicIZLQGGU8gOvxrG</access_token_secret></twitter>
+		<dropbox>
+		<access_token>8PI1wJknXpkAAAAAAAAB0A2AIYRI4NogAWsdK6qM6UHRFzgvUYps_MQmNJT6Zz3g</access_token><access_token_secret>110472014</access_token_secret></dropbox>
+	</authentication>
+</settings>

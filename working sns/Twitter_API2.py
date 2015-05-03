@@ -1,6 +1,7 @@
 import tweetpony
 
-def Twitter_API_Running(filename,code,message,api):
+
+def Twitter_API_Running(filename,access_token,access_token_secret,message):
 	consumer_key='ilsxfHf2M9WVFod3I0hOPlqlJ'
 	consumer_secret= 'PD4gKHDVujDaDiMVkK678BVHoAXtYf4bXpEdZoM9dyLAIZ9xVB'
 
@@ -8,9 +9,14 @@ def Twitter_API_Running(filename,code,message,api):
 	# auth_url = api.get_auth_url()
 	# print "Open this link to obtain your authentication code: %s" % auth_url
 	
-	api.authenticate(code)
-	access_token=api.access_token
-	access_token_secret=api.access_token_secret
+	# api.authenticate(code)
+	# access_token=api.access_token
+	# access_token_secret=api.access_token_secret
+
+
+#-----------------------------------------------------------------------------------------------------------------------------
+
+
 
 	api = tweetpony.API(consumer_key = consumer_key, consumer_secret = consumer_secret, access_token = access_token, access_token_secret = access_token_secret)
 	user = api.user
