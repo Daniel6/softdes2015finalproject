@@ -5,8 +5,8 @@
 			<access_token />
 		</dropbox>
 		<twitter>
-			<access_token />
-			<access_token_secret />
+			<access_token>820869889-p5Un3BH4ZthqOoAJHiEFfkTu9I5d8pVdtAukShpq</access_token>
+			<access_token_secret>412LnyaRhRhIBgqBZPjTwEH53WWw19fnPoiQ5kVTlMX4Q</access_token_secret>
 		</twitter>
 	</authentication>
 	<num_workflows>1</num_workflows>

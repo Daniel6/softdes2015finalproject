@@ -1,6 +1,6 @@
 from xml.etree import ElementTree
 from xml.dom import minidom
-from upload import imgur_Upload, dropbox_Upload
+from upload import imgur_Upload, dropbox_Upload, twitter_Upload
 from edit_image import edit
 from qr_code import generate_QRCode
 import gtk
@@ -27,9 +27,9 @@ class Workflow(object):
 			if "imgur" in self.destinations:
 				self.URL = imgur_Upload("screenshot.png")
 			if "dropbox" in self.destinations:
-				self.URL = dropbox_Upload(self.settings.find('authentication').find('dropbox').find('access_token').text, "screenshot.png", "screenshot.png")
+				self.URL = dropbox_Upload("screenshot.png", "screenshot.png")
 			if "twitter" in self.destinations:
-				pass
+				self.URL = twitter_Upload("screenshot.png", "Test of UploadX")
 
 		#Handle things to do after uploading
 		if "copy_link_to_clipboard" in self.after_upload:
@@ -65,7 +65,7 @@ class Workflow(object):
 			self.destinations = self.settings.find('destinations').text.split(',') #Grab destinations from top level settings
 		except:
 			self.destinations = ""
-			
+
 		try:
 			self.capture_method = self.subsettings.find('capture_method').text
 		except:
