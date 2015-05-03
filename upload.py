@@ -26,15 +26,11 @@ def dropbox_Upload(access_token, file_name, title):
 	flow = dropbox.client.DropboxOAuth2FlowNoRedirect(app_key, app_secret)
 	"""Upload file to dropbox"""
 	client = dropbox.client.DropboxClient(access_token)
-	print(client.account_info())
 	folder_metadata = client.metadata('/')
-	print(folder_metadata)
 
 	f = open(file_name, 'rb')
 	response = client.put_file('/UploadX/' + title, f)
-	print(response)
-
-	return "https://www.dropbox.com/home/Apps" + response['path']
+	return client.media(response['path'])['url']
 
 if __name__ == "__main__":
 	print(dropbox_Upload("8PI1wJknXpkAAAAAAAAB2oxw70Bgr7mavYF0iu4LCkZxUjKGyaZXPASZFKTAFUvh", "screenshot.png", "test_daniel.png"))

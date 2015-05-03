@@ -280,20 +280,36 @@ class DestinationsMenu(object):
 		self.icon_height = 150
 
 		self.imgur_Button = self.makeButton(self.icon_width, self.icon_height, "./res/imgur.jpg")
+
+		self.twitter_box = gtk.VBox()
 		self.twitter_Button = self.makeButton(self.icon_width, self.icon_height, "./res/twitter.png")
+		self.twitter_Reset = gtk.Button(label='Reset')
+		self.twitter_Reset.connect('button-press-event', self.reset, "twitter")
+		self.twitter_box.pack_start(self.twitter_Button, False, False, 1)
+		self.twitter_box.pack_start(self.twitter_Reset, False, False, 1)
+
+		self.dropbox_box = gtk.VBox()
 		self.dropbox_Button = self.makeButton(self.icon_width, self.icon_height, "./res/dropbox.png")
+		self.dropbox_Reset = gtk.Button(label='Reset')
+		self.dropbox_Reset.connect('button-press-event', self.reset, "dropbox")
+		self.dropbox_box.pack_start(self.dropbox_Button, False, False, 1)
+		self.dropbox_box.pack_start(self.dropbox_Reset, False, False, 1)
 
 		self.hbox.pack_start(self.imgur_Button, False, False, 1)
-		self.hbox.pack_start(self.twitter_Button, False, False, 1)
-		self.hbox.pack_start(self.dropbox_Button, False, False, 1)
+		self.hbox.pack_start(self.twitter_box, False, False, 1)
+		self.hbox.pack_start(self.dropbox_box, False, False, 1)
 
 		self.imgur_Button.connect("button-press-event", self.selectDest, "imgur")
 		self.twitter_Button.connect("button-press-event", self.selectDest, "twitter")
 		self.dropbox_Button.connect("button-press-event", self.selectDest, "dropbox")
 
 		self.imgur_Button.show()
+		self.twitter_box.show()
 		self.twitter_Button.show()
+		self.twitter_Reset.show()
+		self.dropbox_box.show()
 		self.dropbox_Button.show()
+		self.dropbox_Reset.show()
 
 	def makeButton(self, width, height, file_name):
 		"""Given dimensions and an image, return a button with the icon of the given image"""
@@ -307,6 +323,25 @@ class DestinationsMenu(object):
 		button.add(icon)
 
 		return button
+
+	def reset(self, widget, event, dest):
+		"""Reset the auth info for a destination"""
+		root = ElementTree.parse('settings.xml').getroot()
+		subsettings = root.find('authentication')
+		if dest == "twitter":
+			section = subsettings.find('twitter')
+			section.find('access_token').text = ""
+			section.find('access_token_secret').text = ""
+		elif dest == "dropbox":
+			section = subsettings.find('dropbox')
+			section.find('access_token').text = ""
+
+		self.savexml(root)
+
+	def savexml(self, root):
+		f = open("settings.xml", "w")
+		f.write(ElementTree.tostring(root))
+		f.close()
 
 	def selectDest(self, widget, event, dest):
 		if dest=="dropbox":
@@ -328,9 +363,7 @@ class DestinationsMenu(object):
 			dest = dest + "dropbox,"
 
 		root.find('destinations').text = dest[:-1]
-		f = open("settings.xml", "w")
-		f.write(ElementTree.tostring(root))
-		f.close()
+		self.savexml(root)
 
 	def delete_event(self, widget, event):
 		"""Hide the window instead of destroying it"""
@@ -373,9 +406,6 @@ class AuthenticationMenu(object):
 		self.vbox.pack_start(self.entry1,  False,False, 0)
 
 		self.create_button("ok")
-
-
-		
 
 	def start(self):
 		self.window.show_all()
@@ -426,7 +456,10 @@ class AuthenticationMenu(object):
 		if access_token_secret != None:
 			asecret = subsettings.find('access_token_secret')
 			asecret.text = access_token_secret
-		
+	
+		self.savexml(root)
+
+	def savexml(self, root):
 		f = open("settings.xml", "w")
 		f.write(ElementTree.tostring(root))
 		f.close()
