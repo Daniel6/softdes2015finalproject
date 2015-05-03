@@ -1,9 +1,12 @@
 import json
 import requests
-# import dropbox
+import sys
+sys.path.insert(1, './lib')
+import dropbox
 from base64 import b64encode
 
 def imgur_Upload(image):
+	"""Upload an image to imgur anonymously and publicly"""
 	response = requests.post(
 		"https://api.imgur.com/3/upload.json", 
 		headers={"Authorization": "Client-ID a21509ca229e76a"},
@@ -17,20 +20,21 @@ def imgur_Upload(image):
 	x = json.loads(response.text)
 	return x['data']['link']
 
-def dropbox_Upload(file_name,code,title,flow):
+def dropbox_Upload(access_token, file_name, title):
 	app_key = 'uehmy7qwfyhnd34'
 	app_secret = 'h1tmocr962j6xfa'
-
-	access_token, user_id = flow.finish(code) # Creates an access token
+	flow = dropbox.client.DropboxOAuth2FlowNoRedirect(app_key, app_secret)
+	"""Upload file to dropbox"""
 	client = dropbox.client.DropboxClient(access_token)
-	print 'linked account: ', client.account_info()
-
+	print(client.account_info())
 	folder_metadata = client.metadata('/')
-	print "metadata:", folder_metadata
+	print(folder_metadata)
 
 	f = open(file_name, 'rb')
 	response = client.put_file('/UploadX/' + title, f)
-	print "uploaded:", response
+	print(response)
+
+	return "https://www.dropbox.com/home/Apps" + response['path']
 
 if __name__ == "__main__":
-	dropbox_Upload("screenshot.png")
+	print(dropbox_Upload("8PI1wJknXpkAAAAAAAAB2oxw70Bgr7mavYF0iu4LCkZxUjKGyaZXPASZFKTAFUvh", "screenshot.png", "test_daniel.png"))

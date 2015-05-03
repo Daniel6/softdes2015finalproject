@@ -3,7 +3,7 @@ sys.path.insert(1, './lib/qrcode-5.1')
 import qrcode
 
 def generate_QRCode(text):
-	#Generate QR code and Display it
+	"""Generate QR Code from a string"""
 	img = qrcode.make(text)
 	img.show()
 

@@ -8,6 +8,7 @@ from multiprocessing import Process, Queue
 
 class ImageDetailPrompt(object):
 	def __init__(self):
+		"""Initialize a menu designed to get an image description from the user and store it for later use."""
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.set_title('Image Details')
 		self.window.set_position(gtk.WIN_POS_CENTER)
@@ -59,9 +60,11 @@ class ImageDetailPrompt(object):
 		self.window.show()
 
 	def getTitle(self):
+		"""Return the current title of the image"""
 		return self.title.get_text()
 
 	def getDescription(self):
+		"""Return the current description of the image"""
 		return self.description.get_text()
 
 	def title_focused(self, widget, event):

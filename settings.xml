@@ -1,12 +1,21 @@
 <settings>
-	<destination>imgur</destination>
+	<destinations>imgur,dropbox</destinations>
+	<authentication>
+		<dropbox>
+			<access_token>8PI1wJknXpkAAAAAAAAB2oxw70Bgr7mavYF0iu4LCkZxUjKGyaZXPASZFKTAFUvh</access_token>
+		</dropbox>
+		<twitter>
+			<access_token>820869889-p5Un3BH4ZthqOoAJHiEFfkTu9I5d8pVdtAukShpq</access_token>
+			<access_token_secret>412LnyaRhRhIBgqBZPjTwEH53WWw19fnPoiQ5kVTlMX4Q</access_token_secret>
+		</twitter>
+	</authentication>
 	<num_workflows>1</num_workflows>
 	<workflows>
 		<workflow1>
 			<hotkeys>Control_L+Shift_L+dollar</hotkeys>
 			<capture_method>def_rect</capture_method>
 			<after_capture>upload</after_capture>
-			<after_upload>copy_link_to_clipboard,generate_qr_code</after_upload>
+			<after_upload>copy_link_to_clipboard</after_upload>
 		</workflow1>
 	</workflows>
 </settings>

@@ -3,6 +3,7 @@ from color_circle import *
 
 class Edit_image(object):
     def __init__(self,filename):
+        """Initialize a window to draw on the image"""
         self.filename=filename
         # Backing pixmap for drawing area
         self.pixmap = None

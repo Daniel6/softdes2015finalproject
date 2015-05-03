@@ -6,25 +6,23 @@ import pyxhook
 from workflow import Workflow
 
 def keyDownEvent(event):
-	# print "Ascii: " + str(event.Ascii) + " Scan Code: " + str(event.ScanCode) + " Key Val: " + str(event.Key)
-	# output = sys.stdout
-	# output.write(str(event.Key))
-	# output.flush()
+	"""Triggered whenever a key is depressed.
+	Pass the event on to all current workflows.
+	"""
 	print(event.Key)
 	sys.stdout.flush()
 	for flow in workflows:
 		flow.keyDown(event.Key)
 
-	# if event.Key == "space": #exit program when spacebar pressed
-	# 	global running
-	# 	running =  False
-
 def keyUpEvent(event):
+	"""Triggered whenever a key is unpressed.
+	Pass the event on to all current workflows.
+	"""
 	for flow in workflows:
 		flow.keyUp(event.Key)
 	
 def loadWorkflows():
-	#Load settings file
+	"""Create workflows from settings.xml"""
 	settings = ElementTree.parse('settings.xml').getroot()
 	#Get number of workflows
 	num_flows = settings.find('num_workflows').text
