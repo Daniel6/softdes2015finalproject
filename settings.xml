@@ -1,5 +1,5 @@
 <settings>
-	<destinations>twitter</destinations>
+	<destinations>twitter,dropbox</destinations>
 	<authentication>
 		<dropbox>
 			<access_token>8PI1wJknXpkAAAAAAAAB9qwY4PqmAf5CYAFn2aFcygdaMWh_kSQ92bZyXUBa51jd</access_token>
@@ -12,7 +12,7 @@
 	<num_workflows>1</num_workflows>
 	<workflows>
 		<workflow1>
-			<hotkeys>Control_L+Shift_L+Z</hotkeys>
+			<hotkeys>Shift_L+Control_L+Z</hotkeys>
 			<capture_method>def_rect</capture_method>
 			<after_capture>edit,upload</after_capture>
 			<after_upload>copy_link_to_clipboard,generate_qr_code</after_upload>

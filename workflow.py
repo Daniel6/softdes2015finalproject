@@ -24,12 +24,13 @@ class Workflow(object):
 		if "edit" in self.after_capture:
 			edit("screenshot.png")
 		if "upload" in self.after_capture:
-			if "imgur" in self.destinations:
-				self.URL = imgur_Upload("screenshot.png")
-			if "dropbox" in self.destinations:
-				self.URL = dropbox_Upload("screenshot.png", "screenshot.png")
 			if "twitter" in self.destinations:
 				self.URL = twitter_Upload("screenshot.png", "Test of UploadX")
+			if "dropbox" in self.destinations:
+				self.URL = dropbox_Upload("screenshot.png", "screenshot.png")
+			if "imgur" in self.destinations:
+				self.URL = imgur_Upload("screenshot.png")
+			
 
 		#Handle things to do after uploading
 		if "copy_link_to_clipboard" in self.after_upload:

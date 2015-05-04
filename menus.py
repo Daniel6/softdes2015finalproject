@@ -10,6 +10,7 @@ import Queue
 import subprocess
 import dropbox
 import tweetpony
+import Local
 
 class MainMenu(object):
 	def __init__(self):
@@ -25,25 +26,31 @@ class MainMenu(object):
 		self.destination_button = gtk.Button(label='Destinations')
 		self.man_capture_button = gtk.Button(label='Capture')
 		self.man_edit_button = gtk.Button(label='Edit Image')
+		self.man_local_button = gtk.Button(label='Local')
 
 		self.settings_button.connect('button-press-event', self.openSettings)
 		self.destination_button.connect('button-press-event', self.openDestinations)
 		self.man_capture_button.connect('button-press-event', self.manCapture)
 		self.man_edit_button.connect('button-press-event', self.manEdit)
+		self.man_local_button.connect('button-press-event', self.local)
 
 		self.vbox.pack_start(self.settings_button, False, False, 1)
 		self.vbox.pack_start(self.destination_button, False, False, 1)
+		self.vbox.pack_start(self.man_local_button, False, False, 1)
 		self.hbox = gtk.HBox(False, 0)
 		self.hbox.pack_start(self.man_capture_button, True, True, 0)
 		self.hbox.pack_start(self.man_edit_button, True, True, 0)
 		self.vbox.pack_start(self.hbox)
-
+		self.man_local_button.show()
 		self.settings_button.show()
 		self.destination_button.show()
 		self.man_capture_button.show()
 		self.man_edit_button.show()
 		self.hbox.show()
 
+	def local(self, widget, event):
+		Local.filechooser()
+		
 	def openSettings(self, widget, event):
 		"""Open the settings menu"""
 		self.settingsMenu.start()
