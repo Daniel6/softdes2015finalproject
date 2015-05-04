@@ -385,7 +385,7 @@ class AuthenticationMenu(object):
 	def __init__(self, media):
 		self.media=media
 		
-		self.Initilize_Register()
+		self.Initialize_Register()
 		# create a new window
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.set_position(gtk.WIN_POS_CENTER)
@@ -420,7 +420,7 @@ class AuthenticationMenu(object):
 		self.window.show_all()
 		gtk.main()
 
-	def Initilize_Register(self):
+	def Initialize_Register(self):
 		
 		if self.media=="twitter":
 		
@@ -482,15 +482,15 @@ class AuthenticationMenu(object):
 				access_token=self.api.access_token
 				access_token_secret=self.api.access_token_secret
 				self.save_authentication(access_token,access_token_secret)
-			gtk.main_quit()
-
+			
 		elif self.media=="dropbox":
 			print("dropbox chosen")
 			storage=self.check_authentication()            
 			if not storage[0]:
 				access_token, user_id = self.flow.finish(self.entry1.get_text())
 				self.save_authentication(access_token)
-			gtk.main_quit()
+		self.window.hide()
+		gtk.main_quit()
 
 	def set_clipboard(self, button):
 		text = self.textbuffer.get_text(*self.textbuffer.get_bounds()) 
