@@ -201,7 +201,7 @@ class SettingsMenu(object):
 			if not running:
 				break
 			time.sleep(.02)
-
+		self.hotkey.set_text(self.hotkey.get_text()[:-1])
 		self.count = 3 #Reset to 3 instead of 0 so that we don't ignore the first three outputs next time
 
 	def save_button_pressed(self, widget, event):
@@ -248,7 +248,7 @@ class SettingsMenu(object):
 
 	def get_hotkey(self):
 		"""Read the hotkey field and trim the last character"""
-		return self.hotkey.get_text()[:-1]
+		return self.hotkey.get_text()
 
 class DestinationsMenu(object):
 	def __init__(self):
@@ -348,11 +348,16 @@ class DestinationsMenu(object):
 		self.savexml(root)
 
 	def savexml(self, root):
+		"""Given a root, save the xml to settings.xml"""
+
 		f = open("settings.xml", "w")
 		f.write(ElementTree.tostring(root))
 		f.close()
 
 	def selectDest(self, widget, event, dest):
+		"""Start up the authentication window for the destination if there is no stored information
+		for that destination"""
+
 		if dest=="dropbox":
 			if not self.dropboxAuth.check_authentication()[0]:
 				self.dropboxAuth.start()
@@ -383,6 +388,10 @@ class DestinationsMenu(object):
 
 class AuthenticationMenu(object):
 	def __init__(self, media):
+		""" Create menu that gives the user a link to dropbox/twitter's authentication page
+		and has them type in the access code that the website gives them. This is needed
+		in order to complete the API and let us access their account."""
+
 		self.media=media
 		
 		self.Initialize_Register()
@@ -417,11 +426,14 @@ class AuthenticationMenu(object):
 		self.create_button("ok")
 
 	def start(self):
+		"""Show and start the window"""
+
 		self.window.show_all()
 		gtk.main()
 
 	def Initialize_Register(self):
-		
+		"""Set up the API user UploadX's registered ID codes"""
+
 		if self.media=="twitter":
 		
 			consumer_key='ilsxfHf2M9WVFod3I0hOPlqlJ'
@@ -435,12 +447,16 @@ class AuthenticationMenu(object):
 			self.flow = dropbox.client.DropboxOAuth2FlowNoRedirect(app_key, app_secret)
 
 	def create_button(self,text_name):
+		"""Add a button with the given name"""
+
 		self.button = gtk.Button(text_name)
 		self.button.connect_object("clicked", self.button_press_event, text_name)
 		self.button.show()
 		self.vbox.pack_start(self.button, False,False, 0)
 
 	def check_authentication(self):
+		"""Check whether there is any data stored already, if there is, return the data"""
+
 		flag=0
 		settings = ElementTree.parse('settings.xml').getroot()
 		subsettings = settings.find('authentication').find(self.media)
@@ -456,6 +472,8 @@ class AuthenticationMenu(object):
 			return (flag,key.text,None)
 
 	def save_authentication(self, access_token, access_token_secret=None):
+		"""Save authentication codes to settings.xml"""
+
 		root=ElementTree.parse('settings.xml').getroot()
 		subsettings = root.find('authentication').find(self.media)
 
@@ -469,12 +487,16 @@ class AuthenticationMenu(object):
 		self.savexml(root)
 
 	def savexml(self, root):
+		"""Given a root, write the xml tree to settings.xml"""
+
 		f = open("settings.xml", "w")
 		f.write(ElementTree.tostring(root))
 		f.close()
 		
 	def button_press_event(self, widget, data=None):
-		
+		"""Triggers when button is pressed, for this application there is only one button, that being the
+		'ok' button"""
+
 		if self.media=="twitter":
 			storage=self.check_authentication()
 			if not storage[0]:
@@ -493,6 +515,8 @@ class AuthenticationMenu(object):
 		gtk.main_quit()
 
 	def set_clipboard(self, button):
+		"""Store the correct URL in the users clipboard"""
+
 		text = self.textbuffer.get_text(*self.textbuffer.get_bounds()) 
 		if self.media=="twitter":
 			self.clipboard.set_text(self.auth_url)

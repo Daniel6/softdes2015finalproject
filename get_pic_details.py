@@ -8,7 +8,8 @@ from multiprocessing import Process, Queue
 
 class ImageDetailPrompt(object):
 	def __init__(self):
-		"""Initialize a menu designed to get an image description from the user and store it for later use."""
+		"""Initialize a menu designed to get an image description from the 
+		user and store it for later use. This is not ready for integration."""
 		self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
 		self.window.set_title('Image Details')
 		self.window.set_position(gtk.WIN_POS_CENTER)

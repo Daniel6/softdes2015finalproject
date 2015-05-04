@@ -1,5 +1,5 @@
 <settings>
-	<destinations>dropbox</destinations>
+	<destinations />
 	<authentication>
 		<dropbox>
 			<access_token>8PI1wJknXpkAAAAAAAAB9qwY4PqmAf5CYAFn2aFcygdaMWh_kSQ92bZyXUBa51jd</access_token>
