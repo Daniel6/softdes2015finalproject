@@ -193,6 +193,7 @@ class SettingsMenu(object):
 		self.hotkey.set_text("")
 		self.save_xml()
 		running = True
+		self.stdout_queue.queue.clear()
 		while not self.stdout_reader.eof():
 
 			while not self.stdout_queue.empty():
