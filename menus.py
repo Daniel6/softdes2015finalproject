@@ -279,7 +279,12 @@ class DestinationsMenu(object):
 		self.icon_width = 150
 		self.icon_height = 150
 
+		self.imgur_box = gtk.VBox()
 		self.imgur_Button = self.makeButton(self.icon_width, self.icon_height, "./res/imgur.jpg")
+		self.imgur_Reset = gtk.Button(label='Reset')
+		self.imgur_Reset.connect('button-press-event', self.reset, "imgur")
+		self.imgur_box.pack_start(self.imgur_Button, False, False, 1)
+		self.imgur_box.pack_start(self.imgur_Reset, False, False, 1)
 
 		self.twitter_box = gtk.VBox()
 		self.twitter_Button = self.makeButton(self.icon_width, self.icon_height, "./res/twitter.png")
@@ -295,7 +300,7 @@ class DestinationsMenu(object):
 		self.dropbox_box.pack_start(self.dropbox_Button, False, False, 1)
 		self.dropbox_box.pack_start(self.dropbox_Reset, False, False, 1)
 
-		self.hbox.pack_start(self.imgur_Button, False, False, 1)
+		self.hbox.pack_start(self.imgur_box, False, False, 1)
 		self.hbox.pack_start(self.twitter_box, False, False, 1)
 		self.hbox.pack_start(self.dropbox_box, False, False, 1)
 
@@ -303,7 +308,9 @@ class DestinationsMenu(object):
 		self.twitter_Button.connect("button-press-event", self.selectDest, "twitter")
 		self.dropbox_Button.connect("button-press-event", self.selectDest, "dropbox")
 
+		self.imgur_box.show()
 		self.imgur_Button.show()
+		self.imgur_Reset.show()
 		self.twitter_box.show()
 		self.twitter_Button.show()
 		self.twitter_Reset.show()
@@ -328,7 +335,9 @@ class DestinationsMenu(object):
 		"""Reset the auth info for a destination"""
 		root = ElementTree.parse('settings.xml').getroot()
 		subsettings = root.find('authentication')
-		if dest == "twitter":
+		if dest == "imgur":
+			pass
+		elif dest == "twitter":
 			section = subsettings.find('twitter')
 			section.find('access_token').text = ""
 			section.find('access_token_secret').text = ""

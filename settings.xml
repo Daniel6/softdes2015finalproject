@@ -1,5 +1,5 @@
 <settings>
-	<destinations>twitter</destinations>
+	<destinations />
 	<authentication>
 		<dropbox>
 			<access_token />
