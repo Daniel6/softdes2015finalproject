@@ -1,9 +1,10 @@
 import gtk
-from color_circle import *
+import color_circle
+
+
 
 class Edit_image(object):
     def __init__(self,filename):
-        """Initialize a window to draw on the image"""
         self.filename=filename
         # Backing pixmap for drawing area
         self.pixmap = None
@@ -12,15 +13,16 @@ class Edit_image(object):
         self.x1 = None
         self.y1 = None
         # Create a new backing pixmap of the appropriate size
-        self.color_selected_object=ColorSelectionExample()
+        self.color_selected_object=color_circle.ColorSelectionExample()
 
         #creating the structure
         self.load_image()
         self.drawing_area()
         self.window()
+
+
    
     def window(self):
-        print "2"
         self.window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         self.window.set_resizable(False)
         self.window.connect("delete_event", self.delete_event)
@@ -28,10 +30,8 @@ class Edit_image(object):
         self.window.set_keep_above(True)
         self.window.add(self.drawing_area)
         self.window.show_all()  
-        print "1"
 
     def load_image(self):
-        print "3"
         self.image = gtk.Image()
         self.image.set_from_file(self.filename)
         self.pixbuf = self.image.get_pixbuf()
@@ -54,7 +54,9 @@ class Edit_image(object):
                                 | gtk.gdk.LEAVE_NOTIFY_MASK
                                 | gtk.gdk.BUTTON_PRESS_MASK
                                 | gtk.gdk.POINTER_MOTION_MASK
-                                | gtk.gdk.POINTER_MOTION_HINT_MASK)    
+                                | gtk.gdk.POINTER_MOTION_HINT_MASK)
+ 
+      
 
     def on_image_resize(self, widget, event):
         allocation = widget.get_allocation()
@@ -108,9 +110,9 @@ class Edit_image(object):
     def button_press_event(self, widget, event):
         
         self.selected_color=self.color_selected_object.color
-        if event.button == 3:
-            self.save_image(widget)
-        elif event.button == 1 and self.pixmap != None:
+        # if event.button == 3:
+        #     self.save_image(widget)
+        if event.button == 1 and self.pixmap != None:
             self.draw_brush(widget, event.x, event.y)
         return True
 
@@ -132,11 +134,15 @@ class Edit_image(object):
         print("Save Image")
         pixbuf1 = gtk.gdk.Pixbuf(gtk.gdk.COLORSPACE_RGB, has_alpha=False, bits_per_sample=8, width=widget.allocation.width, height=widget.allocation.height)
         pixbuf1.get_from_drawable(self.pixmap, self.pixmap.get_colormap(), 0, 0, 0, 0, widget.allocation.width, widget.allocation.height)
-        pixbuf1.save(self.filename, "jpeg", {"quality":"100"})
+        pixbuf1.save(self.filename, "png", {"quality":"100"})
 
     def delete_event(self, widget, event, data=None):
+        self.save_image(widget)
+        self.color_selected_object.delete_event(widget, event)
         gtk.main_quit()
         return False
+
+
 
 def edit(filename):
     Edit_image(filename)

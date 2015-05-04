@@ -1,11 +1,8 @@
-import sys
-sys.path.insert(1, './lib/qrcode-5.1')
-import qrcode
+import os
 
 def generate_QRCode(text):
 	"""Generate QR Code from a string"""
-	img = qrcode.make(text)
-	img.show()
+	os.system("qr " + text + " > qr_code.png | eog qr_code.png &")
 
 if __name__ == "__main__":
 	generate_QRCode("www.google.com")
